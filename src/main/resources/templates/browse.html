@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Items | ShareCircle</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body class="browse-page">
+
+<header class="browse-navbar">
+    <a class="browse-logo" th:href="@{/}">
+        <span class="browse-logo-icon">S</span>
+        ShareCircle
+    </a>
+
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a class="active-link" th:href="@{/browse}">Browse Items</a>
+        <a th:href="@{/login}">Login</a>
+        <a class="browse-signup" th:href="@{/signup}">Sign Up</a>
+    </nav>
+</header>
+
+<section class="browse-hero">
+    <p class="browse-tag">SHARE MORE, WASTE LESS</p>
+    <h1>Find What You Need</h1>
+    <p>Discover useful items shared by your community.</p>
+
+    <form class="browse-search" th:action="@{/browse}" method="get">
+        <input type="text" name="search"
+               placeholder="Search books, sports items, furniture..."
+               th:value="${search}">
+        <button type="submit">Search</button>
+    </form>
+</section>
+
+<main class="browse-content">
+    <div class="browse-heading">
+        <div>
+            <h2>Explore Items</h2>
+            <p>Find something useful for your next need.</p>
+        </div>
+        <span class="item-count"
+              th:text="${items.size()} + ' items found'">4 items found</span>
+    </div>
+
+    <div class="browse-grid" th:if="${!items.isEmpty()}">
+        <article class="browse-item-card" th:each="item : ${items}">
+
+            <div class="browse-image-box">
+                <img th:if="${item.imageUrl != null and !#strings.isEmpty(item.imageUrl)}"
+                     th:src="${item.imageUrl}"
+                     th:alt="${item.name}">
+
+                <div class="no-image"
+                     th:if="${item.imageUrl == null or #strings.isEmpty(item.imageUrl)}">
+                    Item Image
+                </div>
+            </div>
+
+            <div class="browse-item-info">
+                <span class="item-category"
+                      th:text="${item.category}">Category</span>
+
+                <h3 th:text="${item.name}">Item Name</h3>
+
+                <div class="browse-item-bottom">
+                    <div>
+                        <span class="price-label">Price</span>
+                        <p class="browse-price">
+                            ₹<span th:text="${item.price}">0</span>
+                        </p>
+                    </div>
+
+                    <div class="browse-actions">
+                        <a class="view-item-btn"
+                           th:href="@{/items/{id}(id=${item.id})}">
+                            View Details
+                        </a>
+
+                        <a class="view-item-btn book-now-btn"
+                           th:href="@{/bookings/new(itemId=${item.id})}">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <div class="browse-empty" th:if="${items.isEmpty()}">
+        <h3>No items found</h3>
+        <p>Try searching with a different name.</p>
+        <a th:href="@{/browse}">View All Items</a>
+    </div>
+</main>
+
+<footer class="browse-footer">
+    © 2026 ShareCircle. All rights reserved.
+</footer>
+
+</body>
+</html>

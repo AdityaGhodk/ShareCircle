@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareCircle | Category Products</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+    <style>
+        .category-page {
+            max-width: 1200px;
+            margin: auto;
+            padding: 35px 20px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .product-card {
+            min-width: 0;
+            background: white;
+            border: 1px solid #e4eeeb;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px #123b3810;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-info {
+            padding: 14px;
+        }
+
+        .product-info h3 {
+            min-height: 42px;
+            margin: 8px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .product-price {
+            color: #08794f;
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 14px;
+        }
+
+        .product-actions {
+            display: flex;
+            align-items: stretch;
+            gap: 7px;
+        }
+
+        .product-actions a {
+            flex: 1;
+            min-width: 0;
+            padding: 10px 3px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 7px;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+
+        .view-btn {
+            border: 1px solid #07945e;
+            color: #08794f;
+        }
+
+        .book-btn {
+            background: #07945e;
+            border: 1px solid #07945e;
+            color: white;
+        }
+
+        .unavailable {
+            font-size: 12px;
+            color: #687c7a;
+            align-self: center;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 22px;
+            color: #08794f;
+            font-weight: bold;
+        }
+
+        .no-products {
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        @media (max-width: 900px) {
+            .product-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header class="navbar">
+    <a class="logo" th:href="@{/}">
+        <span class="logo-icon">♧</span>
+        <span>ShareCircle</span>
+    </a>
+
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/items}">Browse Items</a>
+        <a th:href="@{/my-bookings}">My Bookings</a>
+    </nav>
+</header>
+
+<main class="category-page">
+    <a class="back-link" th:href="@{/}">← Back to Home</a>
+
+    <h1 th:text="${category} + ' Products'">Products</h1>
+
+    <p style="color:#687c7a; margin:8px 0 25px;">
+        Explore items available to rent and share.
+    </p>
+
+    <div class="product-grid"
+         th:if="${not #lists.isEmpty(items)}">
+
+        <article class="product-card" th:each="item : ${items}">
+
+            <img th:src="${item.imageUrl}"
+                 th:alt="${item.name}"
+                 onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Available';">
+
+            <div class="product-info">
+                <h3 th:text="${item.name}">Item Name</h3>
+
+                <p class="product-price">
+                    ₹<span th:text="${item.price}">100</span>
+                    <small style="font-size:12px; font-weight:normal;">
+                        / day
+                    </small>
+                </p>
+
+                <div class="product-actions">
+                    <a class="view-btn"
+                       th:href="@{/items/{id}(id=${item.id})}">
+                        View Details
+                    </a>
+
+                    <a class="book-btn"
+                       th:if="${item.status == 'AVAILABLE'}"
+                       th:href="@{/bookings/new(itemId=${item.id})}">
+                        Book Now
+                    </a>
+
+                    <span class="unavailable"
+                          th:unless="${item.status == 'AVAILABLE'}">
+                        Unavailable
+                    </span>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <div class="no-products"
+         th:if="${#lists.isEmpty(items)}">
+        <h3>No products found in this category.</h3>
+        <p>Try browsing another category.</p>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | ShareCircle</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body class="auth-page">
+
+<header class="auth-navbar">
+    <a class="brand" th:href="@{/}">
+        <span class="brand-icon">S</span> ShareCircle
+    </a>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/}">Browse Items</a>
+        <a class="nav-button" th:href="@{/signup}">Sign Up</a>
+    </nav>
+</header>
+
+<main class="auth-layout">
+    <aside class="auth-side">
+        <div class="side-icon">🌿</div>
+        <h3>Share Items<br>Build a Better<br>Community</h3>
+        <div class="side-line"></div>
+        <p>Share more. Waste less.</p>
+    </aside>
+
+    <section class="auth-card login-card">
+        <div class="auth-icon">♧</div>
+        <h1>Welcome Back!</h1>
+        <p class="auth-subtitle">Login to your ShareCircle account.</p>
+
+        <div class="auth-alert" th:if="${param.error}">
+            Invalid email or password.
+        </div>
+        <div class="auth-success" th:if="${param.logout}">
+            You have logged out successfully.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="username"
+                   placeholder="Enter your email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password"
+                   placeholder="Enter your password" required>
+
+            <button class="auth-submit" type="submit">Login</button>
+        </form>
+
+        <div class="auth-divider"><span>or</span></div>
+
+        <p class="auth-switch">
+            Don't have an account?
+            <a th:href="@{/signup}">Sign Up</a>
+        </p>
+    </section>
+
+    <aside class="auth-side right-side">
+        <div class="side-icon">♧</div>
+        <h3>Sharing is<br>Caring</h3>
+        <div class="side-line"></div>
+        <p>Make a difference!</p>
+    </aside>
+</main>
+
+<footer class="auth-footer">
+    © 2026 ShareCircle. All rights reserved.
+</footer>
+
+</body>
+</html>

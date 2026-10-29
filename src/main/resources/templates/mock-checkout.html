@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareCircle | Checkout</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f5;
+            color: #24352a;
+        }
+
+        nav {
+            background: #198754;
+            color: white;
+            padding: 18px 7%;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 35px auto;
+            padding: 0 18px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px #0000000d;
+        }
+
+        h2 { margin-top: 0; }
+        .muted { color: #68756c; font-size: 14px; }
+
+        .amount {
+            font-size: 27px;
+            color: #198754;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 7px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccd7ce;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+        }
+
+        .method {
+            border: 1px solid #dce5de;
+            border-radius: 10px;
+            padding: 14px;
+            margin: 12px 0;
+            cursor: pointer;
+        }
+
+        .method input {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .method:has(input:checked) {
+            border-color: #198754;
+            background: #f0faf3;
+        }
+
+        .details {
+            display: none;
+            margin-top: 16px;
+            padding: 16px;
+            background: #f7faf7;
+            border-radius: 10px;
+        }
+
+        .details.active { display: block; }
+
+        .notice {
+            background: #fff5d9;
+            color: #755a14;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+            margin: 15px 0;
+        }
+
+        .btn {
+            width: 100%;
+            border: 0;
+            border-radius: 8px;
+            padding: 14px;
+            background: #198754;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 18px;
+        }
+
+        .btn:hover { background: #146c43; }
+
+        .back {
+            display: inline-block;
+            margin-top: 18px;
+            color: #198754;
+            text-decoration: none;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 700px) {
+            .container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+<nav>ShareCircle</nav>
+
+<div class="container">
+
+    <section class="card">
+        <h2>Booking Summary</h2>
+        <p class="muted">Review your rental details before continuing.</p>
+
+        <h3 th:text="${item.name}">Item Name</h3>
+
+        <p>
+            Booking ID:
+            <strong th:text="${booking.id}">1</strong>
+        </p>
+
+        <p>
+            Start Date:
+            <strong th:text="${booking.startDate}">2026-10-28</strong>
+        </p>
+
+        <p>
+            End Date:
+            <strong th:text="${booking.endDate}">2026-10-29</strong>
+        </p>
+
+        <hr>
+
+        <p>Rental Amount</p>
+        <h2 class="amount">
+            ₹<span th:text="${booking.totalPrice}">500</span>
+        </h2>
+
+        <p class="muted">This is a simulated payment for a college project.</p>
+
+        <div class="notice">
+            Demo mode only. No real payment will be processed.
+            Do not enter a real card number, CVV, UPI PIN or OTP.
+        </div>
+
+        <a class="back" href="/items">← Back to Items</a>
+    </section>
+
+    <section class="card">
+        <h2>Select Payment Method</h2>
+
+        <form th:action="@{/mock-checkout/{id}/pay(id=${booking.id})}"
+              method="post" id="paymentForm">
+
+            <label class="method">
+                <input type="radio" name="paymentMethod"
+                       value="UPI" checked>
+                UPI
+                <div class="muted">Demo UPI ID payment</div>
+            </label>
+
+            <label class="method">
+                <input type="radio" name="paymentMethod"
+                       value="CARD">
+                Debit / Credit Card
+                <div class="muted">Enter sample card details</div>
+            </label>
+
+            <label class="method">
+                <input type="radio" name="paymentMethod"
+                       value="COD">
+                Cash on Delivery
+                <div class="muted">Pay in cash when receiving the item</div>
+            </label>
+
+            <!-- UPI DETAILS -->
+            <div class="details active" id="upiDetails">
+                <h3>UPI Details</h3>
+
+                <label for="upiId">UPI ID</label>
+                <input id="upiId" name="upiId"
+                       type="text"
+                       placeholder="demo@upi"
+                       autocomplete="off"
+                       pattern="[A-Za-z0-9._-]+@[A-Za-z0-9.-]+"
+                       title="Enter a demo UPI ID such as demo@upi">
+
+                <p class="muted">
+                    Example: demo@upi. This is only a demonstration;
+                    no UPI app or bank will be contacted.
+                </p>
+            </div>
+
+            <!-- CARD DETAILS -->
+            <div class="details" id="cardDetails">
+                <h3>Demo Card Details</h3>
+
+                <label for="cardName">Cardholder Name</label>
+                <input id="cardName" type="text"
+                       placeholder="Demo User"
+                       autocomplete="off">
+
+                <label for="cardNumber">Sample Card Number</label>
+                <input id="cardNumber" type="text"
+                       inputmode="numeric"
+                       placeholder="4242 4242 4242 4242"
+                       maxlength="19"
+                       autocomplete="off">
+
+                <div class="row">
+                    <div>
+                        <label for="expiry">Expiry Date</label>
+                        <input id="expiry" type="text"
+                               placeholder="MM/YY"
+                               maxlength="5"
+                               autocomplete="off">
+                    </div>
+
+                    <div>
+                        <label for="cvv">Demo CVV</label>
+                        <input id="cvv" type="password"
+                               inputmode="numeric"
+                               placeholder="123"
+                               maxlength="4"
+                               autocomplete="off">
+                    </div>
+                </div>
+
+                <p class="muted">
+                    Use fictional/sample details only. These fields
+                    are not connected to any bank or card network.
+                </p>
+            </div>
+
+            <!-- CASH ON DELIVERY -->
+            <div class="details" id="codDetails">
+                <h3>Cash on Delivery</h3>
+
+                <p>
+                    <strong>Amount to pay:</strong>
+                    ₹<span th:text="${booking.totalPrice}">500</span>
+                </p>
+
+                <p>
+                    You will pay in cash when the item is delivered
+                    or handed over. No online payment details are needed.
+                </p>
+
+                <p class="muted">
+                    This is a college-project demonstration.
+                    Coordinate the actual handover with the item owner.
+                </p>
+            </div>
+
+            <input type="hidden" name="result" value="SUCCESS">
+
+            <button type="submit" class="btn" id="payButton">
+                Continue with Demo UPI
+            </button>
+        </form>
+    </section>
+</div>
+
+<script>
+    const methods = document.querySelectorAll(
+        'input[name="paymentMethod"]'
+    );
+
+    const upiDetails = document.getElementById("upiDetails");
+    const cardDetails = document.getElementById("cardDetails");
+    const codDetails = document.getElementById("codDetails");
+    const payButton = document.getElementById("payButton");
+
+    const upiId = document.getElementById("upiId");
+    const cardName = document.getElementById("cardName");
+    const cardNumber = document.getElementById("cardNumber");
+    const expiry = document.getElementById("expiry");
+    const cvv = document.getElementById("cvv");
+
+    function updatePaymentMethod() {
+        const selected = document.querySelector(
+            'input[name="paymentMethod"]:checked'
+        ).value;
+
+        upiDetails.classList.toggle("active", selected === "UPI");
+        cardDetails.classList.toggle("active", selected === "CARD");
+        codDetails.classList.toggle("active", selected === "COD");
+
+        upiId.disabled = selected !== "UPI";
+        upiId.required = selected === "UPI";
+
+        cardName.disabled = selected !== "CARD";
+        cardNumber.disabled = selected !== "CARD";
+        expiry.disabled = selected !== "CARD";
+        cvv.disabled = selected !== "CARD";
+
+        cardName.required = selected === "CARD";
+        cardNumber.required = selected === "CARD";
+        expiry.required = selected === "CARD";
+        cvv.required = selected === "CARD";
+
+        if (selected === "UPI") {
+            payButton.textContent = "Pay with Demo UPI";
+        } else if (selected === "CARD") {
+            payButton.textContent = "Pay with Demo Card";
+        } else {
+            payButton.textContent = "Confirm Cash on Delivery";
+        }
+    }
+
+    methods.forEach(method => {
+        method.addEventListener("change", updatePaymentMethod);
+    });
+
+    // Format the sample card number for readability.
+    cardNumber.addEventListener("input", function () {
+        let digits = this.value.replace(/\D/g, "").slice(0, 16);
+        this.value = digits.replace(/(.{4})/g, "$1 ").trim();
+    });
+
+    expiry.addEventListener("input", function () {
+        let digits = this.value.replace(/\D/g, "").slice(0, 4);
+        if (digits.length > 2) {
+            digits = digits.slice(0, 2) + "/" + digits.slice(2);
+        }
+        this.value = digits;
+    });
+
+    cvv.addEventListener("input", function () {
+        this.value = this.value.replace(/\D/g, "").slice(0, 4);
+    });
+
+    document.getElementById("paymentForm").addEventListener("submit", function (event) {
+        const selected = document.querySelector(
+            'input[name="paymentMethod"]:checked'
+        ).value;
+
+        if (selected === "CARD") {
+            const number = cardNumber.value.replace(/\s/g, "");
+            const expiryMatch = expiry.value.match(/^(0[1-9]|1[0-2])\/\d{2}$/);
+
+            if (number.length < 12 || !expiryMatch ||
+                cvv.value.length < 3 || cardName.value.trim() === "") {
+                event.preventDefault();
+                alert("Please fill all demo card fields correctly.");
+                return;
+            }
+        }
+
+        if (selected === "UPI" && !upiId.checkValidity()) {
+            event.preventDefault();
+            upiId.reportValidity();
+            return;
+        }
+
+        if (selected === "COD") {
+            const confirmed = confirm(
+                "Confirm Cash on Delivery for this booking?"
+            );
+            if (!confirmed) {
+                event.preventDefault();
+            }
+        }
+    });
+
+    updatePaymentMethod();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings | ShareCircle</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body class="browse-page">
+
+<header class="browse-navbar">
+    <a class="browse-logo" th:href="@{/}">
+        <span class="browse-logo-icon">S</span> ShareCircle
+    </a>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/browse}">Browse Items</a>
+        <a th:href="@{/my-bookings}">My Bookings</a>
+    </nav>
+</header>
+
+<main class="browse-content">
+    <div class="browse-heading">
+        <div>
+            <h2>My Bookings</h2>
+            <p>View your item rental bookings here.</p>
+        </div>
+    </div>
+
+    <div th:if="${bookings == null or bookings.isEmpty()}">
+        <p>You have no bookings yet.</p>
+        <a th:href="@{/browse}" class="view-item-btn">Browse Items</a>
+    </div>
+
+    <div th:if="${bookings != null and !bookings.isEmpty()}">
+        <div th:each="booking : ${bookings}" class="booking-form-card">
+            <h3>Booking ID: <span th:text="${booking.id}"></span></h3>
+            <p>Item ID: <span th:text="${booking.itemId}"></span></p>
+            <p>Start Date: <span th:text="${booking.startDate}"></span></p>
+            <p>End Date: <span th:text="${booking.endDate}"></span></p>
+            <p>Total Price: ₹<span th:text="${booking.totalPrice}"></span></p>
+            <p>Security Deposit: ₹<span th:text="${booking.securityDeposit}"></span></p>
+            <p>Status: <strong th:text="${booking.status}"></strong></p>
+        </div>
+    </div>
+</main>
+
+<footer class="browse-footer">
+    © 2026 ShareCircle. All rights reserved.
+</footer>
+
+</body>
+</html>

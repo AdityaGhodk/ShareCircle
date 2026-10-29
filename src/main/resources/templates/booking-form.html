@@ -1,0 +1,595 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Book Your Item | ShareCircle</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body.booking-page {
+            margin: 0;
+            background: #f5f9f7;
+            color: #163f36;
+            font-family: Arial, sans-serif;
+        }
+
+        .booking-navbar {
+            background: #ffffff;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 3px 15px rgba(0, 60, 40, 0.06);
+        }
+
+        .booking-logo {
+            color: #078b59;
+            text-decoration: none;
+            font-size: 27px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .booking-logo span {
+            display: inline-flex;
+            width: 42px;
+            height: 42px;
+            margin-right: 8px;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background: #078b59;
+            color: white;
+        }
+
+        .booking-navbar nav {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .booking-navbar nav a {
+            color: #163f36;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .booking-navbar nav a:hover {
+            color: #07965e;
+        }
+
+        .booking-main {
+            max-width: 1120px;
+            margin: 42px auto 65px;
+            padding: 0 22px;
+        }
+
+        .booking-heading {
+            margin-bottom: 28px;
+        }
+
+        .booking-tag {
+            display: inline-block;
+            background: #dff5e9;
+            color: #078b59;
+            border-radius: 30px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .booking-heading h1 {
+            font-size: 36px;
+            margin: 0 0 10px;
+            color: #123f38;
+        }
+
+        .booking-heading p {
+            color: #687c75;
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        .booking-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+            gap: 25px;
+            align-items: start;
+        }
+
+        .booking-card,
+        .summary-card {
+            background: #ffffff;
+            border: 1px solid #e0eee7;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 65, 40, 0.055);
+            overflow: hidden;
+        }
+
+        .product-image {
+            height: 260px;
+            background: #eef6f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 15px;
+        }
+
+        .product-image .image-fallback {
+            font-size: 65px;
+            color: #078b59;
+        }
+
+        .product-details {
+            padding: 25px;
+        }
+
+        .product-category {
+            display: inline-block;
+            background: #e4f6ec;
+            color: #078b59;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .product-details h2 {
+            margin: 0 0 12px;
+            color: #123f38;
+            font-size: 25px;
+        }
+
+        .product-description {
+            color: #71817b;
+            line-height: 1.7;
+            margin-bottom: 18px;
+        }
+
+        .product-price {
+            color: #078b59;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .product-price small {
+            color: #74857e;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .booking-form {
+            padding: 25px;
+            border-top: 1px solid #edf3ef;
+        }
+
+        .booking-form h3,
+        .summary-card h3 {
+            margin: 0 0 20px;
+            color: #123f38;
+            font-size: 20px;
+        }
+
+        .date-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 9px;
+            color: #294f44;
+        }
+
+        .form-group input {
+            width: 100%;
+            min-width: 0;
+            padding: 13px 12px;
+            border: 1px solid #d6e5dc;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #173f35;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #07965e;
+            box-shadow: 0 0 0 3px rgba(7, 150, 94, 0.10);
+        }
+
+        .booking-error {
+            color: #b42318;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .summary-card {
+            padding: 25px;
+            position: sticky;
+            top: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #edf2ef;
+            color: #60746b;
+            font-size: 14px;
+        }
+
+        .summary-row strong {
+            color: #173f35;
+            text-align: right;
+        }
+
+        .summary-total {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-total span {
+            font-weight: 700;
+            color: #163f36;
+        }
+
+        .summary-total strong {
+            font-size: 25px;
+            color: #078b59;
+        }
+
+        .booking-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #07965e;
+            color: #ffffff;
+            border: 0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .booking-button:hover {
+            background: #067b4d;
+            transform: translateY(-1px);
+        }
+
+        .booking-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .secure-note {
+            text-align: center;
+            font-size: 12px;
+            color: #71817b;
+            line-height: 1.7;
+            margin: 15px 0 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 24px;
+            color: #078b59;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .booking-footer {
+            background: #08664d;
+            color: #ffffff;
+            text-align: center;
+            padding: 24px 15px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 760px) {
+            .booking-navbar {
+                padding: 15px 5%;
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .booking-navbar nav {
+                gap: 16px;
+            }
+
+            .booking-main {
+                margin-top: 28px;
+                padding: 0 15px;
+            }
+
+            .booking-heading h1 {
+                font-size: 29px;
+            }
+
+            .booking-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-card {
+                position: static;
+            }
+
+            .product-image {
+                height: 220px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .date-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .product-details,
+            .booking-form,
+            .summary-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body class="booking-page">
+
+<header class="booking-navbar">
+    <a class="booking-logo" th:href="@{/}">
+        <span>S</span> ShareCircle
+    </a>
+
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/items}">Browse Items</a>
+        <a th:href="@{/my-bookings}">My Bookings</a>
+    </nav>
+</header>
+
+<main class="booking-main">
+
+    <section class="booking-heading">
+        <span class="booking-tag">RENT · SHARE · SAVE</span>
+        <h1>Book Your Item</h1>
+        <p>Choose your rental dates and review your booking before continuing.</p>
+    </section>
+
+    <div class="booking-layout">
+
+        <!-- Product and Booking Form -->
+        <section class="booking-card">
+
+            <div class="product-image">
+                <img
+                        th:if="${item.imageUrl != null and !#strings.isEmpty(item.imageUrl)}"
+                        th:src="${item.imageUrl}"
+                        th:alt="${item.name}">
+
+                <div class="image-fallback"
+                     th:unless="${item.imageUrl != null and !#strings.isEmpty(item.imageUrl)}">
+                    ♻
+                </div>
+            </div>
+
+            <div class="product-details">
+                <span class="product-category"
+                      th:text="${item.category}">
+                    Category
+                </span>
+
+                <h2 th:text="${item.name}">Item Name</h2>
+
+                <p class="product-description"
+                   th:text="${item.description != null and !#strings.isEmpty(item.description)
+                   ? item.description : 'A useful item available to rent through the ShareCircle community.'}">
+                    Item description
+                </p>
+
+                <div class="product-price">
+                    ₹<span id="pricePerDay"
+                           th:text="${#numbers.formatDecimal(item.price, 1, 2)}">0.00</span>
+                    <small>/ day</small>
+                </div>
+            </div>
+
+            <form class="booking-form"
+                  th:action="@{/bookings/confirm}"
+                  method="post"
+                  id="bookingForm">
+
+                <h3>Select Rental Dates</h3>
+
+                <input type="hidden" name="itemId" th:value="${item.id}">
+
+                <div class="date-grid">
+                    <div class="form-group">
+                        <label for="startDate">Start Date</label>
+                        <input type="date"
+                               id="startDate"
+                               name="startDate"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endDate">End Date</label>
+                        <input type="date"
+                               id="endDate"
+                               name="endDate"
+                               required>
+                    </div>
+                </div>
+
+                <p class="booking-error" id="dateError" role="alert"></p>
+
+                <button class="booking-button"
+                        id="continueButton"
+                        type="submit">
+                    Confirm Booking &amp; Continue
+                </button>
+
+                <p class="secure-note">
+                    Please check your dates and rental amount before confirming.
+                </p>
+            </form>
+
+        </section>
+
+        <!-- Booking Summary -->
+        <aside class="summary-card">
+            <h3>Booking Summary</h3>
+
+            <div class="summary-row">
+                <span>Item</span>
+                <strong th:text="${item.name}">Item Name</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Price per day</span>
+                <strong>
+                    ₹<span th:text="${#numbers.formatDecimal(item.price, 1, 2)}">0.00</span>
+                </strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Rental duration</span>
+                <strong id="rentalDays">0 days</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Rental amount</span>
+                <strong>₹<span id="rentalTotal">0.00</span></strong>
+            </div>
+
+            <div class="summary-total">
+                <span>Estimated Total</span>
+                <strong>₹<span id="grandTotal">0.00</span></strong>
+            </div>
+
+            <p class="secure-note">
+                <strong>Good things are better when shared.</strong><br>
+                Final booking and payment details will be shown in the next step.
+            </p>
+
+            <a class="back-link" th:href="@{/items}">
+                ← Back to Browse Items
+            </a>
+        </aside>
+
+    </div>
+</main>
+
+<footer class="booking-footer">
+    © 2026 ShareCircle. All rights reserved.
+</footer>
+
+<script th:inline="javascript">
+    const price = Number(/*[[${item.price}]]*/ 0);
+
+    const startInput = document.getElementById("startDate");
+    const endInput = document.getElementById("endDate");
+    const daysOutput = document.getElementById("rentalDays");
+    const rentalOutput = document.getElementById("rentalTotal");
+    const grandOutput = document.getElementById("grandTotal");
+    const errorOutput = document.getElementById("dateError");
+    const form = document.getElementById("bookingForm");
+
+    const now = new Date();
+    const localToday = new Date(
+        now.getTime() - now.getTimezoneOffset() * 60000
+    ).toISOString().split("T")[0];
+
+    startInput.min = localToday;
+    endInput.min = localToday;
+
+    function calculateTotal() {
+        errorOutput.textContent = "";
+
+        if (!startInput.value || !endInput.value) {
+            daysOutput.textContent = "0 days";
+            rentalOutput.textContent = "0.00";
+            grandOutput.textContent = "0.00";
+            return true;
+        }
+
+        if (endInput.value < startInput.value) {
+            daysOutput.textContent = "Invalid dates";
+            rentalOutput.textContent = "0.00";
+            grandOutput.textContent = "0.00";
+            errorOutput.textContent =
+                "End date must be the same as or later than the start date.";
+            return false;
+        }
+
+        const start = new Date(startInput.value + "T00:00:00");
+        const end = new Date(endInput.value + "T00:00:00");
+
+        const days = Math.round((end - start) / 86400000) + 1;
+        const total = days * price;
+
+        daysOutput.textContent = days + (days === 1 ? " day" : " days");
+        rentalOutput.textContent = total.toFixed(2);
+        grandOutput.textContent = total.toFixed(2);
+
+        return true;
+    }
+
+    startInput.addEventListener("change", function () {
+        endInput.min = startInput.value || localToday;
+
+        if (endInput.value && endInput.value < startInput.value) {
+            endInput.value = "";
+        }
+
+        calculateTotal();
+    });
+
+    endInput.addEventListener("change", calculateTotal);
+
+    form.addEventListener("submit", function (event) {
+        if (!startInput.value || !endInput.value) {
+            event.preventDefault();
+            errorOutput.textContent = "Please select both rental dates.";
+            return;
+        }
+
+        if (startInput.value < localToday ||
+            endInput.value < startInput.value) {
+            event.preventDefault();
+            errorOutput.textContent = "Please select valid rental dates.";
+            return;
+        }
+    });
+</script>
+
+</body>
+</html>

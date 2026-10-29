@@ -1,0 +1,482 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation | ShareCircle</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f8f5;
+            color: #24352b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #08794c;
+            font-size: 27px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #08794c;
+            color: white;
+            display: grid;
+            place-items: center;
+        }
+
+        nav {
+            display: flex;
+            gap: 28px;
+        }
+
+        nav a {
+            color: #263b2f;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: #08794c;
+        }
+
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 1000px;
+            margin: 48px auto;
+            padding: 0 20px;
+        }
+
+        .success-banner {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .success-icon {
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #d9f6e5;
+            color: #08794c;
+            display: grid;
+            place-items: center;
+            font-size: 42px;
+            font-weight: bold;
+        }
+
+        .success-banner h1 {
+            font-size: 34px;
+            margin-bottom: 12px;
+            color: #173b2a;
+        }
+
+        .success-banner p {
+            color: #66756b;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .booking-card {
+            background: white;
+            border: 1px solid #e5ece6;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 12px 35px rgba(30, 70, 45, 0.07);
+        }
+
+        .card-heading {
+            padding: 23px 28px;
+            border-bottom: 1px solid #edf1ed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .card-heading h2 {
+            font-size: 20px;
+        }
+
+        .booking-id {
+            background: #eef7f0;
+            color: #08794c;
+            padding: 9px 13px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .item-section {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 28px;
+            border-bottom: 1px solid #edf1ed;
+        }
+
+        .item-image {
+            width: 125px;
+            height: 115px;
+            flex-shrink: 0;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #edf3ee;
+        }
+
+        .item-info h3 {
+            font-size: 21px;
+            margin-bottom: 9px;
+        }
+
+        .item-info p {
+            color: #738076;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            padding: 28px;
+        }
+
+        .detail {
+            background: #f8faf8;
+            padding: 18px;
+            border-radius: 11px;
+            border: 1px solid #edf1ed;
+        }
+
+        .detail-label {
+            color: #748076;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .amount-section {
+            margin: 0 28px;
+            padding: 22px 0;
+            border-top: 1px solid #e8eee9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .amount-section span {
+            color: #637267;
+        }
+
+        .amount {
+            font-size: 25px;
+            font-weight: 800;
+            color: #08794c;
+        }
+
+        .notice {
+            margin: 0 28px 25px;
+            padding: 15px 17px;
+            background: #eff8f1;
+            color: #315c40;
+            border-radius: 10px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 14px;
+            padding: 0 28px 28px;
+        }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 14px 22px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: #08794c;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #05613c;
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 1px solid #cbd8ce;
+            color: #244b34;
+        }
+
+        .btn-secondary:hover {
+            background: #f3f8f4;
+        }
+
+        footer {
+            margin-top: auto;
+            background: #086448;
+            color: white;
+            text-align: center;
+            padding: 24px 15px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 15px 5%;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .brand {
+                font-size: 22px;
+            }
+
+            nav {
+                gap: 15px;
+                font-size: 13px;
+            }
+
+            main {
+                margin: 30px auto;
+                padding: 0 14px;
+            }
+
+            .success-banner h1 {
+                font-size: 27px;
+            }
+
+            .card-heading {
+                padding: 20px;
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .item-section {
+                padding: 20px;
+                gap: 14px;
+            }
+
+            .item-image {
+                width: 90px;
+                height: 90px;
+            }
+
+            .item-info h3 {
+                font-size: 17px;
+            }
+
+            .details-grid {
+                padding: 20px;
+                gap: 12px;
+            }
+
+            .detail {
+                padding: 13px;
+            }
+
+            .detail-value {
+                font-size: 14px;
+            }
+
+            .amount-section {
+                margin: 0 20px;
+            }
+
+            .notice {
+                margin: 0 20px 20px;
+            }
+
+            .actions {
+                padding: 0 20px 22px;
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a th:href="@{/}" class="brand">
+        <span class="brand-icon">S</span>
+        ShareCircle
+    </a>
+
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/items}">Browse Items</a>
+        <a th:href="@{/my-bookings}">My Bookings</a>
+    </nav>
+</header>
+
+<main>
+    <section class="success-banner">
+        <div class="success-icon">✓</div>
+        <h1>Booking Submitted!</h1>
+        <p>
+            Your booking has been saved successfully.<br>
+            Thank you for choosing ShareCircle.
+        </p>
+    </section>
+
+    <section class="booking-card">
+
+        <div class="card-heading">
+            <h2>Booking Summary</h2>
+
+            <span class="booking-id">
+                Booking #<span th:text="${booking.id}">1</span>
+            </span>
+        </div>
+
+        <div class="item-section">
+            <img class="item-image"
+                 th:if="${item.imageUrl != null and !#strings.isEmpty(item.imageUrl)}"
+                 th:src="${item.imageUrl}"
+                 th:alt="${item.name}">
+
+            <div class="item-info">
+                <h3 th:text="${item.name}">Item Name</h3>
+                <p>Your selected rental item</p>
+                <p>
+                    Booking date:
+                    <strong th:text="${#temporals.format(booking.startDate, 'dd MMM yyyy')}">
+                        28 Oct 2026
+                    </strong>
+                </p>
+            </div>
+        </div>
+
+        <div class="details-grid">
+            <div class="detail">
+                <div class="detail-label">Start Date</div>
+                <div class="detail-value"
+                     th:text="${#temporals.format(booking.startDate, 'dd MMM yyyy')}">
+                    28 Oct 2026
+                </div>
+            </div>
+
+            <div class="detail">
+                <div class="detail-label">End Date</div>
+                <div class="detail-value"
+                     th:text="${#temporals.format(booking.endDate, 'dd MMM yyyy')}">
+                    30 Oct 2026
+                </div>
+            </div>
+
+            <div class="detail">
+                <div class="detail-label">Booking Status</div>
+                <div class="detail-value"
+                     th:text="${booking.status}">
+                    PENDING
+                </div>
+            </div>
+
+            <div class="detail">
+                <div class="detail-label">Payment Status</div>
+                <div class="detail-value"
+                     th:text="${booking.paymentStatus != null ? booking.paymentStatus : 'UNPAID'}">
+                    UNPAID
+                </div>
+            </div>
+        </div>
+
+        <div class="amount-section">
+            <span>Total Rental Amount</span>
+            <div class="amount">
+                ₹<span th:text="${booking.totalPrice}">0</span>
+            </div>
+        </div>
+
+        <div class="notice"
+             th:if="${booking.paymentStatus == null
+                      or booking.paymentStatus == 'UNPAID'
+                      or booking.paymentStatus == 'FAILED'
+                      or booking.paymentStatus == 'COD'}">
+            <strong>Next step:</strong>
+            <span th:if="${booking.paymentStatus == 'COD'}">
+                Cash on Delivery has been selected for this demo booking.
+            </span>
+            <span th:unless="${booking.paymentStatus == 'COD'}">
+                Your booking is saved. Please check the payment status before considering the transaction complete.
+            </span>
+        </div>
+
+        <div class="notice"
+             th:if="${booking.paymentStatus == 'PAID'}">
+            <strong>Payment complete!</strong>
+            Your demo payment has been recorded successfully.
+        </div>
+
+        <div class="notice"
+             th:if="${booking.status == 'PENDING'}">
+            Your booking is awaiting approval.
+        </div>
+
+        <div class="actions">
+            <a th:href="@{/items}" class="btn btn-primary">
+                Browse More Items
+            </a>
+
+            <a th:href="@{/my-bookings}" class="btn btn-secondary">
+                View My Bookings
+            </a>
+        </div>
+
+    </section>
+</main>
+
+<footer>
+    © 2026 ShareCircle. All rights reserved.
+</footer>
+
+</body>
+</html>
