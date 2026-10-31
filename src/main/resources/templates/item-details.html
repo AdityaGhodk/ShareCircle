@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Details | ShareCircle</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #263238;
+        }
+
+        .navbar {
+            background: #173b35;
+            color: white;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 22px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 55px auto;
+            padding: 0 20px;
+        }
+
+        .details-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.07);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #e9efed;
+        }
+
+        .category {
+            display: inline-block;
+            background: #e1f2eb;
+            color: #18734e;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-bottom: 15px;
+            color: #173b35;
+        }
+
+        .description {
+            color: #66736f;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .price-box {
+            background: #f3f8f5;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .price-label {
+            color: #68756f;
+            font-size: 14px;
+        }
+
+        .price {
+            color: #16734e;
+            font-size: 30px;
+            font-weight: bold;
+            margin-top: 7px;
+        }
+
+        .book-btn {
+            display: block;
+            text-align: center;
+            background: #16734e;
+            color: white;
+            padding: 15px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .book-btn:hover {
+            background: #10583b;
+        }
+
+        .unavailable-message {
+            color: #687c7a;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            padding: 13px;
+            border: 1px solid #16734e;
+            color: #16734e;
+            border-radius: 9px;
+            text-decoration: none;
+        }
+
+        @media (max-width: 700px) {
+            .details-card {
+                grid-template-columns: 1fr;
+                padding: 18px;
+            }
+
+            .item-image {
+                height: 250px;
+            }
+
+            .navbar {
+                padding: 18px 5%;
+            }
+
+            .navbar a {
+                margin-left: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">ShareCircle</div>
+
+    <div>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/items}">Browse Items</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="details-card">
+
+        <div>
+            <img class="item-image"
+                 th:if="${item.imageUrl != null and !item.imageUrl.isEmpty()}"
+                 th:src="${item.imageUrl}"
+                 th:alt="${item.name}"
+                 onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Available';">
+
+            <div class="item-image"
+                 th:if="${item.imageUrl == null or item.imageUrl.isEmpty()}"
+                 style="display:flex; align-items:center; justify-content:center; color:#66736f;">
+                No Image Available
+            </div>
+        </div>
+
+        <div class="item-info">
+
+            <span class="category"
+                  th:text="${item.category}">
+                Category
+            </span>
+
+            <h1 th:text="${item.name}">
+                Item Name
+            </h1>
+
+            <p class="description"
+               th:text="${item.description}">
+                Item description
+            </p>
+
+            <div class="price-box">
+                <p class="price-label">Rental Price</p>
+
+                <p class="price">
+                    ₹<span th:text="${item.price}">0</span>
+                    <small style="font-size:14px; font-weight:normal;">
+                        / day
+                    </small>
+                </p>
+            </div>
+
+            <a class="book-btn"
+               th:if="${item.status == 'AVAILABLE'}"
+               th:href="@{/bookings/new(itemId=${item.id})}">
+                Book Now
+            </a>
+
+            <p class="unavailable-message"
+               th:unless="${item.status == 'AVAILABLE'}">
+                This item is currently unavailable.
+            </p>
+
+            <a class="back-btn"
+               th:href="@{/items}">
+                ← Back to Browse
+            </a>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

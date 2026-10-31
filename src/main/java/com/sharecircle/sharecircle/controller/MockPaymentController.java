@@ -56,22 +56,39 @@ public class MockPaymentController {
                 .orElseThrow(() ->
                         new IllegalArgumentException("Booking not found"));
 
-        if (!"SUCCESS".equals(result) && !"FAILED".equals(result)) {
+        if (!paymentMethod.equals("UPI")
+                && !paymentMethod.equals("CARD")
+                && !paymentMethod.equals("COD")) {
+            throw new IllegalArgumentException("Invalid payment method");
+        }
+
+        if (!result.equals("SUCCESS") && !result.equals("FAILED")) {
             throw new IllegalArgumentException("Invalid payment result");
         }
 
         if ("SUCCESS".equals(result)) {
-            booking.setPaymentStatus(
-                    "COD".equals(paymentMethod) ? "COD" : "PAID");
+
+            // Confirm booking
+            booking.setStatus("CONFIRMED");
+
+            // Update payment status
+            if ("COD".equals(paymentMethod)) {
+                booking.setPaymentStatus("UNPAID");
+            } else {
+                booking.setPaymentStatus("PAID");
+            }
 
             bookingRepository.save(booking);
 
             redirectAttributes.addFlashAttribute(
                     "successMessage",
-                    "Demo payment successful! No real money was charged.");
+                    "Booking confirmed successfully!");
 
         } else {
+
+            booking.setStatus("PENDING");
             booking.setPaymentStatus("FAILED");
+
             bookingRepository.save(booking);
 
             redirectAttributes.addFlashAttribute(

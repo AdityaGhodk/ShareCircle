@@ -21,4 +21,6 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
     List<Item> findByNameContainingIgnoreCase(String name);
 
     List<Item> findTop4ByOrderByIdAsc();
+
+    List<Item> findByStatusIgnoreCase(String available);
 }

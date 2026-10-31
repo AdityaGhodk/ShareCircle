@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | ShareCircle</title>
+    <link rel="stylesheet" th:href="@{/support.css}">
+
+    <style>
+        .contact-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .contact-info-card {
+            padding: 22px 15px;
+            text-align: center;
+            background: white;
+            border: 1px solid #e4eeeb;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(20, 60, 40, .05);
+        }
+
+        .contact-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #eaf8f1;
+            font-size: 23px;
+        }
+
+        .contact-info-card h3 {
+            margin-bottom: 7px;
+            color: #08794f;
+            font-size: 16px;
+        }
+
+        .contact-info-card p,
+        .contact-info-card a {
+            color: #687c7a;
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        /* Clickable Phone and Email */
+        .contact-info-card a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .contact-info-card a:hover {
+            color: #07945e;
+            text-decoration: underline;
+        }
+
+        .contact-form-card {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        @media (max-width: 650px) {
+            .contact-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body class="support-page">
+
+<header class="support-navbar">
+    <a class="support-logo" th:href="@{/}">♧ ShareCircle</a>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/items}">Browse Items</a>
+        <a th:href="@{/help}">Help & FAQ</a>
+    </nav>
+</header>
+
+<section class="support-hero">
+    <h1>Contact Us</h1>
+    <p>We would love to hear from you. Get in touch with our team!</p>
+</section>
+
+<main class="support-container">
+
+    <!-- Contact Information -->
+    <div class="contact-info-grid">
+
+        <div class="contact-info-card">
+            <div class="contact-icon">📞</div>
+            <h3>Call Us</h3>
+            <p>
+                <a href="tel:+917219747184">+91 7219747184</a>
+            </p>
+            <p>
+                <a href="tel:+919322440802">+91 9322440802</a>
+            </p>
+        </div>
+
+        <div class="contact-info-card">
+            <div class="contact-icon">✉️</div>
+            <h3>Email Us</h3>
+            <p>
+                <a href="mailto:support@sharecircle.com">
+                    support@sharecircle.com
+                </a>
+            </p>
+        </div>
+
+        <div class="contact-info-card">
+            <div class="contact-icon">📍</div>
+            <h3>Our Location</h3>
+            <p>Pune, Maharashtra, India</p>
+        </div>
+
+    </div>
+
+    <!-- Contact Form -->
+    <div class="support-card contact-form-card">
+
+        <h2>Send Us a Message</h2>
+        <p>Fill out the form below and share your query with us.</p>
+
+        <form class="support-form"
+              th:action="@{/contact}"
+              method="post">
+
+            <label>Your Name</label>
+            <input type="text" name="name"
+                   placeholder="Enter your name" required>
+
+            <label>Email Address</label>
+            <input type="email" name="email"
+                   placeholder="Enter your email" required>
+
+            <label>Phone Number</label>
+            <input type="tel" name="phone"
+                   placeholder="Enter your phone number">
+
+            <label>Subject</label>
+            <input type="text" name="subject"
+                   placeholder="Enter subject" required>
+
+            <label>Your Message</label>
+            <textarea name="message"
+                      placeholder="Write your message here..."
+                      required></textarea>
+
+            <button type="submit">Send Message</button>
+        </form>
+
+    </div>
+
+</main>
+
+<footer class="support-footer">
+    © 2026 ShareCircle. All rights reserved.
+    <p>
+        <a th:href="@{/help}">Help & FAQ</a>
+        <a th:href="@{/contact}">Contact Us</a>
+        <a th:href="@{/terms}">Terms</a>
+        <a th:href="@{/privacy}">Privacy</a>
+    </p>
+</footer>
+
+</body>
+</html>

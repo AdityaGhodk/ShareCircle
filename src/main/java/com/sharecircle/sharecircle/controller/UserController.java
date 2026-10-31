@@ -1,8 +1,8 @@
-
 package com.sharecircle.sharecircle.controller;
 
 import com.sharecircle.sharecircle.entity.User;
 import com.sharecircle.sharecircle.service.UserService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +26,7 @@ public class UserController {
 
     // Get user by ID
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable Integer id) {
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -42,14 +42,15 @@ public class UserController {
     // Update user
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(
-            @PathVariable Long id,
+            @PathVariable Integer id,
             @RequestBody User user) {
+
         return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
     // Delete user
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

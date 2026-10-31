@@ -15,12 +15,13 @@
     </a>
     <nav>
         <a th:href="@{/}">Home</a>
-        <a th:href="@{/}">Browse Items</a>
+        <a th:href="@{/items}">Browse Items</a>
         <a class="nav-button" th:href="@{/login}">Login</a>
     </nav>
 </header>
 
 <main class="auth-layout signup-layout">
+
     <aside class="auth-side">
         <div class="side-icon">🌿</div>
         <h3>Join Our<br>Sharing<br>Community</h3>
@@ -29,18 +30,33 @@
     </aside>
 
     <section class="auth-card signup-card">
+
         <div class="auth-icon">♧</div>
         <h1>Create Account</h1>
         <p class="auth-subtitle">Join the ShareCircle community.</p>
 
+        <p th:if="${error}" th:text="${error}"
+           style="color:red; text-align:center;"></p>
+
+        <p th:if="${success}" th:text="${success}"
+           style="color:green; text-align:center;"></p>
+
         <form th:action="@{/signup}" method="post">
+
+            <input type="hidden"
+                   th:if="${_csrf != null}"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}">
+
             <label for="name">Full Name</label>
             <input type="text" id="name" name="name"
-                   placeholder="Enter your full name" required>
+                   placeholder="Enter your full name"
+                   required>
 
             <label for="email">Email</label>
             <input type="email" id="email" name="email"
-                   placeholder="Enter your email" required>
+                   placeholder="Enter your email"
+                   required>
 
             <label for="password">Password</label>
             <input type="password" id="password" name="password"
@@ -64,6 +80,7 @@
             Already have an account?
             <a th:href="@{/login}">Login</a>
         </p>
+
     </section>
 
     <aside class="auth-side right-side">
@@ -72,6 +89,7 @@
         <div class="side-line"></div>
         <p>Welcome to ShareCircle!</p>
     </aside>
+
 </main>
 
 <footer class="auth-footer">

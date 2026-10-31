@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & FAQ | ShareCircle</title>
+    <link rel="stylesheet" th:href="@{/support.css}">
+</head>
+<body class="support-page">
+
+<header class="support-navbar">
+    <a class="support-logo" th:href="@{/}">♧ ShareCircle</a>
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/items}">Browse Items</a>
+        <a th:href="@{/bookings}">My Bookings</a>
+    </nav>
+</header>
+
+<section class="support-hero">
+    <h1>Help & Frequently Asked Questions</h1>
+    <p>Find answers to common questions about ShareCircle.</p>
+</section>
+
+<main class="support-container">
+
+    <div class="support-card">
+        <h2>1. What is ShareCircle?</h2>
+        <p>ShareCircle is a platform where users can rent and share useful items with their community instead of purchasing everything.</p>
+    </div>
+
+    <div class="support-card">
+        <h2>2. How can I find an item?</h2>
+        <p>Visit the Browse Items page, explore available items or use the search box to find a specific item.</p>
+    </div>
+
+    <div class="support-card">
+        <h2>3. How can I book an item?</h2>
+        <p>Open the item, click Book Now, select your booking dates and complete the booking process.</p>
+    </div>
+
+    <div class="support-card">
+        <h2>4. How can I check my bookings?</h2>
+        <p>Visit the My Bookings section to view your booking details and booking status.</p>
+    </div>
+
+    <div class="support-card">
+        <h2>5. What if an item is unavailable?</h2>
+        <p>You cannot book an unavailable item. You can explore other items listed on ShareCircle.</p>
+    </div>
+
+    <div class="support-card">
+        <h2>6. How can I contact support?</h2>
+        <p>Visit our Contact Us page and send your question or issue through the contact form.</p>
+        <a th:href="@{/contact}">Contact Us →</a>
+    </div>
+
+</main>
+
+<footer class="support-footer">
+    © 2026 ShareCircle. All rights reserved.
+    <p>
+        <a th:href="@{/help}">Help & FAQ</a>
+        <a th:href="@{/contact}">Contact Us</a>
+        <a th:href="@{/terms}">Terms</a>
+        <a th:href="@{/privacy}">Privacy</a>
+    </p>
+</footer>
+
+</body>
+</html>

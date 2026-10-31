@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ShareCircle Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7f5;
+            color: #26332b;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 7%;
+            background: white;
+            box-shadow: 0 2px 8px #ddd;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #26332b;
+            margin-left: 20px;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: #23834b;
+        }
+
+        .welcome {
+            padding: 35px 7%;
+            background: #e5f3e8;
+        }
+
+        .items-section {
+            padding: 30px 7%;
+        }
+
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 22px;
+        }
+
+        .item-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px #ddd;
+        }
+
+        .item-card img {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .price {
+            color: #23834b;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .view-button {
+            display: inline-block;
+            padding: 10px 16px;
+            background: #23834b;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .view-button:hover {
+            background: #176b39;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav a {
+                margin-left: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="brand">ShareCircle</div>
+
+    <div>
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/items}">Browse Items</a>
+        <a th:href="@{/my-bookings}">My Bookings</a>
+
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit"
+                    style="border:none; background:none; cursor:pointer; margin-left:20px;">
+                Logout
+            </button>
+        </form>
+    </div>
+</nav>
+
+<section class="welcome">
+    <h1>Welcome to ShareCircle!</h1>
+    <p>Share more. Waste less. Discover items in your community.</p>
+</section>
+
+<section class="items-section">
+
+    <h2>Available Items</h2>
+
+    <div class="item-grid">
+
+        <div class="item-card" th:each="item : ${items}">
+
+            <img th:if="${item.imageUrl != null and !item.imageUrl.isEmpty()}"
+                 th:src="${item.imageUrl}"
+                 th:alt="${item.name}"
+                 onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Image+Not+Available';">
+
+            <div th:if="${item.imageUrl == null or item.imageUrl.isEmpty()}"
+                 style="height:170px; display:flex; align-items:center; justify-content:center; background:#e9efed; border-radius:8px;">
+                No Image Available
+            </div>
+
+            <h3 th:text="${item.name}">Item Name</h3>
+
+            <p th:text="${item.description}">Item description</p>
+
+            <p>
+                Category:
+                <span th:text="${item.category}"></span>
+            </p>
+
+            <p>
+                Condition:
+                <span th:text="${item.condition}"></span>
+            </p>
+
+            <p>
+                Location:
+                <span th:text="${item.location}"></span>
+            </p>
+
+            <p class="price">
+                ₹<span th:text="${item.price}"></span>
+                / day
+            </p>
+
+            <a class="view-button"
+               th:href="@{/items/{id}(id=${item.id})}">
+                View Details
+            </a>
+
+        </div>
+
+    </div>
+
+    <p th:if="${#lists.isEmpty(items)}">
+        No available items right now.
+    </p>
+
+</section>
+
+</body>
+</html>

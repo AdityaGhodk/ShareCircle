@@ -15,6 +15,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class BookingPageController {
@@ -25,6 +29,7 @@ public class BookingPageController {
     public BookingPageController(
             ItemRepository itemRepository,
             BookingRepository bookingRepository) {
+
         this.itemRepository = itemRepository;
         this.bookingRepository = bookingRepository;
     }
@@ -70,6 +75,7 @@ public class BookingPageController {
 
         // Calculate rental amount
         long days = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+
         double totalPrice = days * item.getPrice();
 
         // Create booking
@@ -112,14 +118,28 @@ public class BookingPageController {
         return "booking-success";
     }
 
-    // Show My Bookings page
+    // Show My Bookings page with item details and images
     @GetMapping("/my-bookings")
     public String showMyBookings(Model model) {
 
-        model.addAttribute(
-                "bookings",
-                bookingRepository.findByUserId(1)
-        );
+        List<Booking> bookings = bookingRepository.findByUserId(1);
+
+        List<Map<String, Object>> bookingItems = new ArrayList<>();
+
+        for (Booking booking : bookings) {
+
+            Item item = itemRepository.findById(booking.getItemId())
+                    .orElse(null);
+
+            Map<String, Object> bookingData = new HashMap<>();
+
+            bookingData.put("booking", booking);
+            bookingData.put("item", item);
+
+            bookingItems.add(bookingData);
+        }
+
+        model.addAttribute("bookingItems", bookingItems);
 
         return "my-bookings";
     }

@@ -1,4 +1,3 @@
-
 package com.sharecircle.sharecircle.service;
 
 import com.sharecircle.sharecircle.entity.User;
@@ -23,7 +22,7 @@ public class UserService {
     }
 
     // Get user by ID
-    public Optional<User> getUserById(Long id) {
+    public Optional<User> getUserById(Integer id) {
         return userRepository.findById(id);
     }
 
@@ -42,7 +41,7 @@ public class UserService {
     }
 
     // Update user
-    public User updateUser(Long id, User updatedUser) {
+    public User updateUser(Integer id, User updatedUser) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found!"));
 
@@ -54,7 +53,7 @@ public class UserService {
     }
 
     // Delete user
-    public void deleteUser(Long id) {
+    public void deleteUser(Integer id) {
         if (!userRepository.existsById(id)) {
             throw new IllegalArgumentException("User not found!");
         }

@@ -907,12 +907,107 @@ button, input {
 }
 
 
+/* ===== My Bookings Page ===== */
 
+.booking-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    align-items: start;
+}
 
+.booking-form-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
 
+    width: 100%;
+    min-width: 0;
+    padding: 22px;
 
+    border: 1px solid #e1ebe5;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 4px 15px rgba(20, 60, 40, 0.06);
+}
 
+.booking-details {
+    flex: 1;
+    min-width: 0;
+}
 
+.booking-details h3 {
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e8efea;
+    color: #08764c;
+    font-size: 19px;
+}
+
+.booking-details p {
+    margin: 9px 0;
+    color: #53665b;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.booking-details strong {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: #fff3d9;
+    color: #a66b00;
+    font-size: 12px;
+}
+
+.booking-item-image {
+    flex: 0 0 170px;
+    width: 170px;
+    max-width: 170px;
+    text-align: center;
+}
+
+.booking-item-image img {
+    display: block;
+    width: 170px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.booking-item-image h4 {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Tablet */
+@media (max-width: 1000px) {
+    .booking-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Mobile */
+@media (max-width: 550px) {
+    .booking-form-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .booking-item-image {
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .booking-item-image img {
+        width: 100%;
+        height: 200px;
+    }
+}
 
 
 
@@ -1225,4 +1320,54 @@ button, input {
     .browse-content {
         padding: 30px 16px;
     }
+}
+/* Price above buttons */
+.browse-item-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    border-top: 1px solid #edf0ed;
+    padding-top: 15px;
+}
+
+/* Both buttons in one row */
+.browse-actions {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    gap: 7px;
+}
+
+.browse-actions a {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 3px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 7px;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.view-item-btn {
+    background: white;
+    border: 1px solid #07945e;
+    color: #08794f;
+}
+
+.view-item-btn:hover {
+    background: #e1f2eb;
+}
+
+.book-now-btn {
+    background: #07945e;
+    border: 1px solid #07945e;
+    color: white !important;
+}
+
+.book-now-btn:hover {
+    background: #08794f;
 }
